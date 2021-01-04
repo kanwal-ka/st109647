@@ -1,0 +1,126 @@
+''**********************************************************************************
+
+''ABC Automated Testing
+''Copyright (c) 2009 ABC
+''All Rights Reserved Worldwide
+''Unauthorized Duplication or Distribution Prohibited
+''***********************************************************************************
+''FILENAME: addcustomer
+''**************************************************************************************
+''ABOUT THIS FILE
+
+''AUTHOR IDENTITY
+
+''Initials    Name/Company
+''--------    ------------------------------------------
+''rw          Sam Thecat ABC INC
+
+''REVISION HISTORY:
+
+''Date/Initials       Comments
+''-----------         -----------------------
+
+''02/20/2018  st     Created for LoanApp 2.1
+
+
+
+
+
+
+LaunchLoanApp()
+Wait(10)
+
+If Browser("name:= Loan Management System - Login").Exist (1) Then
+
+'output results into Result file
+Reporter.ReportEvent micDone, "LoanApp", "LoanApp already opened."
+
+'Login as admin
+
+
+Browser("Loan Management System").Page("Loan Management System").WebButton("Login").Click
+
+
+Login "Mesa","admin","kkaur0928"'a sub procedure call
+
+Else
+
+Reporter.ReportEvent micFail, "Login Page", " Was not opened successfully. This step is failed!"
+systemutil.Run "IExplore.exe", "http://qa-hitekschool.com/lms/loans/2108"
+
+End If
+
+
+
+Wait(12)
+
+'click button 'Customers'
+
+Browser("Loan Management System").Page("Loan Management System_2").WebButton("Customers").Click
+
+Wait(5)
+
+'click menu 'Action'
+
+Browser("Loan Management System").Page("Loan Management System_2").WebButton("Action").Click
+
+Wait(5)
+
+'select 'Add Customer' item
+
+Browser("Loan Management System").Page("Loan Management System_2").Link("Add Customer").Click
+Wait(3)
+
+FillInAddCustomerFields "julia","roberts","1100 sunset blvd","hollywood","CA","98286"
+
+
+
+Wait(5)
+
+'validate customer was created successfully
+
+Browser("Loan Management System").Page("Loan Management System_2").WebElement("cell_0_1").Check CheckPoint("cell_0_1")
+
+
+
+CloseLoanApp() 'a sub procesure call
+LaunchLoanApp() 'a sub procedure call
+
+Wait(10)
+
+
+'validate that Login page is opened successfully
+If Browser("name:= Loan Management System - Login").Exist (1) Then
+
+'output results into Result file
+Reporter.ReportEvent micPass, "Login Page", " Was opened successfully"
+
+'login as just created user
+Login "Mesa", "admin", "kkaur0928" 'a sub procedure call
+
+Else
+
+Reporter.ReportEvent micFail, "Login Page", " Was not opened successfully. This step is failed!"
+
+End If
+
+Wait(10)
+
+CloseLoanApp'a sub procedure call
+
+''Invalid input - missing FirstName
+AddCustomer "","roberts","1100 sunset blvd","hollywood","CA","98286"
+
+''Invalid input - missing LastName
+AddCustomer "julia","","1100 sunset blvd","hollywood","CA","98286"
+
+'valid input
+'AddCustomer "julia","roberts","1100 sunset blvd","hollywood","CA","98286"
+
+
+''Valid input
+'AddCustomer "julia","roberts","1100 sunset blvd","hollywood","CA","98286"
+
+''Valid input
+'AddCustomer "julia","roberts","1100 sunset blvd","hollywood","CA","98286"
+
